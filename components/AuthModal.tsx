@@ -245,14 +245,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   <InputGroup label="Password" icon={<Lock />} id="register-password" type={showPassword ? 'text' : 'password'} value={registerData.password} onChange={(e) => setRegisterData({ ...registerData, password: e.target.value.slice(0, 8) })} disabled={isLoading}
                     rightIcon={showPassword ? <EyeOff className="cursor-pointer" onClick={() => setShowPassword(false)} /> : <Eye className="cursor-pointer" onClick={() => setShowPassword(true)} />}
                     maxLength={8}
-                    onCopy={e => e.preventDefault()}
-                    onPaste={e => e.preventDefault()}
+                    onCopy={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
+                    onPaste={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
                   />
                   <InputGroup label="Confirm Password" icon={<Lock />} id="register-confirm-password" type={showConfirmPassword ? 'text' : 'password'} value={registerData.confirmPassword} onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value.slice(0, 8) })} disabled={isLoading}
                     rightIcon={showConfirmPassword ? <EyeOff className="cursor-pointer" onClick={() => setShowConfirmPassword(false)} /> : <Eye className="cursor-pointer" onClick={() => setShowConfirmPassword(true)} />}
                     maxLength={8}
-                    onCopy={e => e.preventDefault()}
-                    onPaste={e => e.preventDefault()}
+                    onCopy={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
+                    onPaste={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
                   />
                   <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
                     {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating Account...</>) : 'Create Account'}
