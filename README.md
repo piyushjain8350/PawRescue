@@ -37,9 +37,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ---
 
-## 📜 License
-[MIT](LICENSE)
-
----
-
-⭐ **If you find this project interesting, please star the repo and connect with me on [LinkedIn](https://linkedin.com/in/your-profile).**  
+⭐ **If you find this project interesting, please star the repo and connect with me on [LinkedIn](https://www.linkedin.com/in/piyushjain8350/).**  
