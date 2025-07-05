@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Mail, Lock, User, Heart, Eye, EyeOff, RefreshCcw } from 'lucide-react';
+import { Loader2, Mail, Lock, User, Heart, Eye, EyeOff, RefreshCcw, Check, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
@@ -52,6 +52,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    special: false
+  });
+
   useEffect(() => {
     if (showOtp && otpInputRef.current) {
       otpInputRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -76,6 +84,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }, 1000);
     return () => clearInterval(interval);
   }, [showOtp, timer]);
+
+  useEffect(() => {
+    const password = registerData.password;
+    setPasswordRequirements({
+      length: password.length === 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      digit: /[0-9]/.test(password),
+      special: /[^A-Za-z0-9]/.test(password)
+    });
+  }, [registerData.password]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -248,6 +267,34 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     onCopy={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
                     onPaste={(e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault()}
                   />
+                  
+                  {/* Password Requirements */}
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Password Requirements:</Label>
+                    <div className="space-y-1 text-xs">
+                      <div className={`flex items-center gap-2 ${passwordRequirements.length ? 'text-green-600' : 'text-gray-500'}`}>
+                        {passwordRequirements.length ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        Exactly 8 characters
+                      </div>
+                      <div className={`flex items-center gap-2 ${passwordRequirements.uppercase ? 'text-green-600' : 'text-gray-500'}`}>
+                        {passwordRequirements.uppercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        At least 1 uppercase letter
+                      </div>
+                      <div className={`flex items-center gap-2 ${passwordRequirements.lowercase ? 'text-green-600' : 'text-gray-500'}`}>
+                        {passwordRequirements.lowercase ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        At least 1 lowercase letter
+                      </div>
+                      <div className={`flex items-center gap-2 ${passwordRequirements.digit ? 'text-green-600' : 'text-gray-500'}`}>
+                        {passwordRequirements.digit ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        At least 1 digit
+                      </div>
+                      <div className={`flex items-center gap-2 ${passwordRequirements.special ? 'text-green-600' : 'text-gray-500'}`}>
+                        {passwordRequirements.special ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                        At least 1 special character
+                      </div>
+                    </div>
+                  </div>
+
                   <InputGroup label="Confirm Password" icon={<Lock />} id="register-confirm-password" type={showConfirmPassword ? 'text' : 'password'} value={registerData.confirmPassword} onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value.slice(0, 8) })} disabled={isLoading}
                     rightIcon={showConfirmPassword ? <EyeOff className="cursor-pointer" onClick={() => setShowConfirmPassword(false)} /> : <Eye className="cursor-pointer" onClick={() => setShowConfirmPassword(true)} />}
                     maxLength={8}
